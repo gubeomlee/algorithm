@@ -38,7 +38,7 @@ class Solution {
 			int len = nums.length; // 최대 교환 횟수는 len -1로 고정한다.
 			if (cnt > len - 1) {
 				dfs(nums, len - 1, result);
-				if ((cnt - len) % 2 == 0) { // cnt - len 값이 짝수 인 경우 1의 자리와 10의 자리 값을 교환한다.
+				if ((cnt - len) % 2 == 0) { // 최대 교환 횟수를 초과하는 경우 cnt - len 값이 짝수라면 1의 자리와 10의 자리 값을 교환한다.
 					char[] temp_result = Integer.toString(result[0]).toCharArray();
 					result[0] = Integer.parseInt(new String(swap(temp_result, len - 1, len - 2)));
 				}
