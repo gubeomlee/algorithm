@@ -10,16 +10,12 @@ class Main {
 		}
 	}
 
-	public static long lcm(long numA, long numB) {
-		return numA * numB / gcd(numA, numB);
-	}
-
 	public static void main(String args[]) throws Exception {
 		Scanner sc = new Scanner(System.in);
 		long numA = sc.nextLong();
 		long numB = sc.nextLong();
 
-		long result = lcm(Math.max(numA, numB), Math.min(numB, numA));
+		long result = numA * numB / gcd(numA, numB);
 		System.out.println(result);
 		sc.close();
 	}
