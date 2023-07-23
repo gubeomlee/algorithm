@@ -22,7 +22,7 @@ class Main {
 			int a = sc.nextInt();
 			int b = sc.nextInt();
 
-			int result = lcm(Math.max(a, b), Math.min(a, b));
+			int result = lcm(a, b);
 			System.out.println(result);
 		}
 		sc.close();
