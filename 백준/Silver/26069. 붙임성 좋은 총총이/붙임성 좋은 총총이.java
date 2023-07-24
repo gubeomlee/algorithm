@@ -11,9 +11,10 @@ public class Main {
 		set.add("ChongChong");
 		for (int i = 0; i < len; i++) {
 			String[] name = sc.nextLine().split(" ");
-			if (set.contains(name[0]) || set.contains(name[1])) {
-				set.add(name[0]);
+			if (set.contains(name[0])) {
 				set.add(name[1]);
+			} else if (set.contains(name[1])) {
+				set.add(name[0]);
 			}
 		}
 		System.out.println(set.size());
