@@ -35,7 +35,6 @@ public class Main {
 		for (Deque<Integer> que : result) {
 			StringBuilder sb = new StringBuilder();
 			for (int num : que) {
-
 				sb.append(num + " ");
 			}
 			System.out.println(sb);
