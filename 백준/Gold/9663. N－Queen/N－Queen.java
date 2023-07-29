@@ -3,16 +3,19 @@ import java.util.Scanner;
 public class Main {
 	// 해당 위치에 퀸을 배치했을 때 대각선 방향으로 다른 퀸이 있는지 확인하는 메서드
 	public static boolean isSafe(int[][] matrix, int len, int row, int col) {
+		// 같은 열에 있는지 확인 
 		for (int i = 0; i < row; i++) {
 			if (matrix[i][col] == 1) {
 				return false;
 			}
 		}
+		// 왼쪽 위 대각선에 있는지 확인 
 		for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
 			if (matrix[i][j] == 1) {
 				return false;
 			}
 		}
+		// 오른쪽 위 대각선에 있는지 확인 
 		for (int i = row, j = col; i >= 0 && j < len; i--, j++) {
 			if (matrix[i][j] == 1) {
 				return false;
