@@ -8,8 +8,6 @@ public class Main {
 			int result;
 			if (a <= 0 || b <= 0 || c <= 0) {
 				result = 1;
-			} else if (a > 20 || b > 20 || c > 20) {
-				result = w(20, 20, 20, memo);
 			} else if (a < b && b < c) {
 				result = w(a, b, c - 1, memo) + w(a, b - 1, c - 1, memo) - w(a, b - 1, c, memo);
 			} else {
@@ -23,6 +21,7 @@ public class Main {
 
 	public static void main(String args[]) {
 		Scanner sc = new Scanner(System.in);
+		int[][][] memo = new int[21][21][21];
 		while (true) {
 			int a = sc.nextInt();
 			int b = sc.nextInt();
@@ -33,7 +32,6 @@ public class Main {
 				System.out.printf("w(%d, %d, %d) = %d\n", a, b, c, 1);
 			} else {
 				// 재귀적 풀이에서 중복되는 계산이 많이 발생하는 경우 계산한 값을 저장했다가 다시 사용한다.
-				int[][][] memo = new int[21][21][21];
 				int result;
 				if (a > 20 || b > 20 || c > 20) {
 					result = w(20, 20, 20, memo);
