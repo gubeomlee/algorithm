@@ -21,6 +21,7 @@ public class Main {
 
 	public static void main(String args[]) {
 		Scanner sc = new Scanner(System.in);
+		// 재사용 가능하기 때문에 반복문 밖에 선언한다. 재사용을 통해 메모리를 절약할 수 있다.
 		int[][][] memo = new int[21][21][21];
 		while (true) {
 			int a = sc.nextInt();
