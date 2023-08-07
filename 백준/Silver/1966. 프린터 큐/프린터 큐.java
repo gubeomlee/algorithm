@@ -1,43 +1,45 @@
-import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-class Main {
-	public static void main(String args[]) throws Exception {
+public class Main {
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		int t = sc.nextInt();
-		for (int test_case = 0; test_case < t; test_case++) {
+		int T = sc.nextInt();
+		for (int t = 0; t < T; t++) {
 			int len = sc.nextInt();
 			int idx = sc.nextInt();
 
-			Queue<Integer> que = new ArrayDeque<>();
+			Queue<Integer> que = new LinkedList<>();
 			for (int i = 0; i < len; i++) {
-				que.add(sc.nextInt());
+				que.offer(sc.nextInt());
 			}
 
-			int result = 0;
+			int result = 1;
 			while (true) {
 				int maxNum = Integer.MIN_VALUE;
 				for (int num : que) {
 					maxNum = Math.max(maxNum, num);
 				}
-				
-				if (idx == 0 && que.peek() == maxNum) { // 큐의 맨 앞 요소가 찾고자 하는 요소이고 최댓값인 경우 
-					System.out.println(++result);
-					break;
-				} else if (que.peek() == maxNum) { // 큐의 맨 앞 요소가 최댓값인 경우 
-					result++;
+
+				if (idx == 0) { // 큐의 맨 앞 요소가 목표값인 경우
+					if (que.peek() == maxNum) { // 해당 값이 최댓값인 경우
+						break;
+					} else { // 해당 값이 최댓값이 아닌 경우
+						que.offer(que.poll());
+						idx = que.size() - 1; // 목표값 인덱스 갱신 
+					}
+				} else { // 큐의 맨 앞 요소가 목표값이 아닌 경우
 					idx--;
-					que.poll();
-				} else { // 큐의 맨 앞 요소가 최댓값이 아닌 경우 
-					que.add(que.poll());
-					if (idx == 0) { // 큐의 맨 앞 요소가 찾고자 하는 요소인 경우 
-						idx = que.size() - 1;
-					} else {
-						idx--;
+					if (que.peek() == maxNum) { // 해당 값이 최댓값인 경우
+						que.poll();
+						result++;
+					} else { // 해당 값이 최댓값이 아닌 경우
+						que.offer(que.poll());
 					}
 				}
 			}
+			System.out.println(result);
 		}
 		sc.close();
 	}
