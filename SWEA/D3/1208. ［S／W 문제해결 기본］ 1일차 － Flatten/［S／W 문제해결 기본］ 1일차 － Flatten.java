@@ -16,9 +16,10 @@ class Solution {
 			int temp = 0; // 평탄화 작업 저장할 변수
 			// 최대높이의 인덱스에서 시작하여 높이를 감소시킨다.
 			outerLoop1: while (true) {
-				outerLoop2: for (int i = 98; i >= 0; i--) {
-					if (arr[i] < arr[99]) { // 현재 높이가 최대 높이보다 작은 경우
-						for (int j = i + 1; j < 100; j++) {
+				// 평탄화 조기 종료 처리를 위해 순회 방식 및 높이 비교 부등호에 유의해야 한다.
+				outerLoop2: for (int i = 0; i < 100; i++) {
+					if (arr[i] == arr[99]) { // 현재 높이가 최대 높이보다 작은 경우
+						for (int j = i; j < 100; j++) {
 							temp++; // 평탄화 작업 수 증가
 							arr[j]--; // 평탄화
 							if (temp == num) {
@@ -31,9 +32,9 @@ class Solution {
 			}
 			// 최소높이의 인덱스에서 시작하여 높이를 증가시킨다.
 			outerLoop1: while (true) {
-				outerLoop2: for (int i = 1; i < 100; i++) {
-					if (arr[i] > arr[0]) { // 현재 높이가 최대 높이보다 큰 경우
-						for (int j = i - 1; j >= 0; j--) {
+				outerLoop2: for (int i = 99; i >= 0; i--) {
+					if (arr[i] == arr[0]) { // 현재 높이가 최대 높이보다 큰 경우
+						for (int j = i; j >= 0; j--) {
 							temp--; // 평탄화 작업 수 감소
 							arr[j]++; // 평탄화
 							if (temp == 0) {
