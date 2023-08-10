@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Solution {
 	public static String five(char[][] matrix, int len) {
-		int[][] direction = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 }, { -1, -1 }, };
+		int[][] direction = { { 1, 0 }, { 0, 1 }, { 1, -1 }, { 1, 1 } };
 		for (int i = 0; i < len; i++) {
 			for (int j = 0; j < len; j++) {
 				if (matrix[i][j] == 'o') {
