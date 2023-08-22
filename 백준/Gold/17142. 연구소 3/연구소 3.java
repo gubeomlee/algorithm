@@ -7,53 +7,39 @@ import java.util.Scanner;
 
 public class Main {
 	// 바이러스의 확산 시간을 계산하는 메서드
-	public static void getVirusTime(int[][] matrix, Queue<int[]> idx, int[] result) {
+	public static void getVirusTime(int[][] matrix, Queue<int[]> idx, int emptySpace, int[] result) {
 		int cnt = 0;
+		int emptyCnt = 0;
 		int[][] direction = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
-		int cntNotActive = 0;
+
 		while (!idx.isEmpty()) {
-			Queue<int[]> temp = new LinkedList<>();
-			int tempCnt = 0;
-			int checkNotActive = 0;
-			while (!idx.isEmpty()) {
+			if (emptyCnt == emptySpace) {
+				result[0] = Math.min(result[0], cnt); // 최소 시간 업데이트
+				return;
+			}
+
+			int size = idx.size(); // 반복횟수가 중간에 변하면 안되므로 길이를 변수에 넣어서 쓴다.
+			for (int i = 0; i < size; i++) {
 				int[] cur = idx.poll();
-				matrix[cur[0]][cur[1]] = 3; // 바이러스 확산 지역 표시
+				if (matrix[cur[0]][cur[1]] == 0) {
+					emptyCnt++;
+					matrix[cur[0]][cur[1]] = 1;
+				}
 				for (int[] dir : direction) {
 					int row = cur[0] + dir[0];
 					int col = cur[1] + dir[1];
-
 					if (0 <= row && row < matrix.length && 0 <= col && col < matrix[0].length
-							&& (matrix[row][col] == 0 || matrix[row][col] == 2)) {
+							&& matrix[row][col] != 1) {
 						if (matrix[row][col] == 0) {
-							tempCnt = 1; // 바이러스 확산 표시
-						} else if (matrix[row][col] == 2) {
-							checkNotActive = 1;
+							emptyCnt++;
 						}
-						matrix[row][col] = 3; // 바이러스 확산 지역 표시
-						temp.add(new int[] { row, col }); // 다음 확산 위치 추가
+						matrix[row][col] = 1;
+						idx.add(new int[] { row, col });
 					}
 				}
 			}
-			if (tempCnt == 0 && temp.size() > 0) {
-				cntNotActive += checkNotActive;
-			}
-			if (tempCnt == 1) {
-				tempCnt += cntNotActive;
-			}
-			idx = temp; // 확산된 위치 갱신
-			cnt += tempCnt; // 확산 시간 갱신
+			cnt++;
 		}
-
-		// 모든 칸이 바이러스로 뒤덮였는지 검사
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[0].length; j++) {
-				if (matrix[i][j] == 0) {
-					return; // 0인 칸이 있으면 종료
-				}
-			}
-		}
-
-		result[0] = Math.min(result[0], cnt); // 최소 시간 업데이트
 	}
 
 	// 조합을 생성하는 백트래킹 함수
@@ -74,6 +60,7 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		int len = sc.nextInt();
 		int m = sc.nextInt();
+		int emptySpace = 0;
 
 		int[][] matrix = new int[len][len];
 		List<int[]> virusIdx = new ArrayList<>();
@@ -82,6 +69,9 @@ public class Main {
 				matrix[i][j] = sc.nextInt();
 				if (matrix[i][j] == 2) {
 					virusIdx.add(new int[] { i, j });
+				}
+				if (matrix[i][j] == 0) {
+					emptySpace++;
 				}
 			}
 		}
@@ -96,7 +86,7 @@ public class Main {
 				testMatrix[i] = Arrays.copyOf(matrix[i], len); // 테스트 매트릭스 생성
 			}
 			Queue<int[]> que = new LinkedList<>(com); // 큐에 시작 지점 추가
-			getVirusTime(testMatrix, que, result); // 바이러스 확산 시간 계산
+			getVirusTime(testMatrix, que, emptySpace, result); // 바이러스 확산 시간 계산
 		}
 
 		if (result[0] == Integer.MAX_VALUE) {
