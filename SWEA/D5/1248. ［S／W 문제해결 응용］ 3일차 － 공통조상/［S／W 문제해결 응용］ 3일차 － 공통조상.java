@@ -1,31 +1,26 @@
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
-class Solution {
-	// 부모 노드를 탐색하여 공통조상을 반환하는 메서드 
-	public static ArrayList<Integer> getParentNodes(Map<Integer, Integer> tree, int vertex) {
-		ArrayList<Integer> parents = new ArrayList<>();
-		while (vertex != 1) {
-			parents.add(tree.get(vertex));
-			vertex = tree.get(vertex);
-		}
-		return parents;
-	}
-	// 어떤 노드의 자식노드 개수를 반환하는 메서드 
-	public static int getChildrenSum(Map<Integer, ArrayList<Integer>> tree, int vertex) {
+public class Solution {
+	// 특정 노드의 자손노드 개수를 반환하는 메서드
+	public static int getChildSum(Map<Integer, List<Integer>> tree, int vertext) {
 		int sum = 1;
-		Queue<Integer> deque = new ArrayDeque<>();
-		deque.offer(vertex);
-		while (!deque.isEmpty()) {
-			int cur = deque.poll();
-			ArrayList<Integer> children = tree.get(cur);
-			if (children != null) {
-				for (int child : children) {
-					deque.offer(child);
+
+		Queue<Integer> que = new LinkedList<>();
+		que.offer(vertext);
+
+		while (!que.isEmpty()) {
+			int cur = que.poll();
+			List<Integer> childrenNode = tree.get(cur);
+			if (childrenNode != null) {
+				for (int child : childrenNode) {
+					que.offer(child);
 					sum++;
 				}
 			}
@@ -33,38 +28,54 @@ class Solution {
 		return sum;
 	}
 
+	// 부모노드를 탐색하여 공통조상을 반환하는 메서드
+	public static int getParentVertex(Map<Integer, Integer> tree, int target1, int target2) {
+		Stack<Integer> target1P = new Stack<>();
+		Stack<Integer> target2P = new Stack<>();
+
+		target1P.add(target1);
+		target2P.add(target2);
+		// 각 노드의 부모노드 탐색
+		while (target1P.peek() != 1) {
+			target1P.add(tree.get(target1P.peek()));
+		}
+		while (target2P.peek() != 1) {
+			target2P.add(tree.get(target2P.peek()));
+		}
+		// 공통조상 탐색
+		for (int num1 : target1P) {
+			for (int num2 : target2P) {
+				if (num1 == num2) {
+					return num1;
+				}
+			}
+		}
+		return 0;
+	}
+
 	public static void main(String args[]) throws Exception {
 		Scanner sc = new Scanner(System.in);
 		int T = sc.nextInt();
-		for (int test_case = 1; test_case <= T; test_case++) {
-			int vertex = sc.nextInt();
+		for (int t = 1; t <= T; t++) {
+			int vertext = sc.nextInt();
 			int edge = sc.nextInt();
-			int vertex1 = sc.nextInt();
-			int vertex2 = sc.nextInt();
+			int target1 = sc.nextInt();
+			int target2 = sc.nextInt();
+
 			Map<Integer, Integer> parentsTree = new HashMap<>();
-			Map<Integer, ArrayList<Integer>> childrenTree = new HashMap<>();
+			Map<Integer, List<Integer>> childrenTree = new HashMap<>();
 
 			for (int i = 0; i < edge; i++) {
 				int parent = sc.nextInt();
 				int child = sc.nextInt();
-				parentsTree.put(child, parent); // 자식노드의 부모노드 정보 저장 
-				childrenTree.computeIfAbsent(parent, key -> new ArrayList<>()).add(child); // 부모노드의 자식노드 정보 저장 
+				parentsTree.put(child, parent);
+				childrenTree.computeIfAbsent(parent, key -> new ArrayList<>()).add(child);
 			}
-			// 각각의 노드에 대해 부모노드 탐색 
-			ArrayList<Integer> v1Parents = getParentNodes(parentsTree, vertex1);
-			ArrayList<Integer> v2Parents = getParentNodes(parentsTree, vertex2);
-			// 두 노드의 공통 조상 탐색 
-			int parent_vertex = 0;
-			for (int v1 : v1Parents) {
-				if (v2Parents.contains(v1)) {
-					parent_vertex = v1;
-					break;
-				}
-			}
-			// 공통조상의 자식 노드 개수 계
-			int sum = getChildrenSum(childrenTree, parent_vertex);
 
-			System.out.printf("#%d %d %d\n", test_case, parent_vertex, sum);
+			int parentVertex = getParentVertex(parentsTree, target1, target2);
+			int childSum = getChildSum(childrenTree, parentVertex);
+
+			System.out.printf("#%d %d %d\n", t, parentVertex, childSum);
 		}
 		sc.close();
 	}
