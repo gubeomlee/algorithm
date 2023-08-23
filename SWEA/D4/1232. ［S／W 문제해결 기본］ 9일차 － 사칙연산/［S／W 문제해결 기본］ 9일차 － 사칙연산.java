@@ -14,19 +14,15 @@ public class Solution {
 	}
 
 	public static String postorder(String[] arr, int idx, int len, int[] lChild, int[] rChild) {
-		if (idx < len && idx > 0) {
+		// 현재 노드가 연산자인 경우
+		if (!Character.isDigit(arr[idx].toCharArray()[0])) {
 			// 왼쪽 자식 노드 순회
-			postorder(arr, lChild[idx], len, lChild, rChild);
+			int num1 = Integer.parseInt(postorder(arr, lChild[idx], len, lChild, rChild));
 			// 오른쪽 자식 노드 순회
-			postorder(arr, rChild[idx], len, lChild, rChild);
-			// 현재 노드가 연산자인 경우
-			if (!Character.isDigit(arr[idx].toCharArray()[0])) {
-				int num1 = Integer.parseInt(arr[lChild[idx]]);
-				int num2 = Integer.parseInt(arr[rChild[idx]]);
-				arr[idx] = Integer.toString(cal(num1, num2, arr[idx]));
-			}
+			int num2 = Integer.parseInt(postorder(arr, rChild[idx], len, lChild, rChild));
+			return Integer.toString(cal(num1, num2, arr[idx]));
 		}
-		return arr[1];
+		return arr[idx];
 	}
 
 	public static void main(String args[]) throws Exception {
@@ -40,10 +36,10 @@ public class Solution {
 			int[] rChild = new int[len + 1];
 
 			for (int i = 1; i <= len; i++) {
-				sc.next();
-				arr[i] = sc.next();
+				int num = sc.nextInt();
+				arr[num] = sc.next();
 				// 노드가 연산자인 경우 자식 노드 정보 입력
-				if (!Character.isDigit(arr[i].toCharArray()[0])) {
+				if (!Character.isDigit(arr[num].toCharArray()[0])) {
 					lChild[i] = sc.nextInt();
 					rChild[i] = sc.nextInt();
 				}
