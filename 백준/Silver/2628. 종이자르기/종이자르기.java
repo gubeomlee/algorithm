@@ -4,6 +4,23 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+	// 간격의 최대 길이 구하는 메서드
+	public static int getLen(List<Integer> arr, int maxLen) {
+		int len = 0;
+
+		if (arr.size() > 0) { // 분할 요소가 있는 경우
+			len = arr.get(0);
+			for (int i = 1; i < arr.size(); i++) {
+				len = Math.max(len, arr.get(i) - arr.get(i - 1));
+			}
+			len = Math.max(len, maxLen - arr.get(arr.size() - 1));
+		} else { // 분할 요소가 없는 경우
+			len = maxLen;
+		}
+
+		return len;
+	}
+
 	public static void main(String args[]) throws Exception {
 		Scanner sc = new Scanner(System.in);
 
@@ -26,30 +43,8 @@ public class Main {
 		Collections.sort(row);
 		Collections.sort(col);
 
-		int y = 0;
-		int x = 0;
-
-		// 행분할에 따른 최대 세로 길이 갱신
-		if (row.size() > 0) {
-			y = row.get(0);
-			for (int i = 1; i < row.size(); i++) {
-				y = Math.max(y, row.get(i) - row.get(i - 1));
-			}
-			y = Math.max(y, yLen - row.get(row.size() - 1));
-		} else {
-			y = yLen;
-		}
-
-		// 열분할에 따른 최대 가로 길이 갱신
-		if (col.size() > 0) {
-			x = col.get(0);
-			for (int i = 1; i < col.size(); i++) {
-				x = Math.max(x, col.get(i) - col.get(i - 1));
-			}
-			x = Math.max(x, xLen - col.get(col.size() - 1));
-		} else {
-			x = xLen;
-		}
+		int y = getLen(row, yLen); // 세로 방향 최대 길이 간격 계산
+		int x = getLen(col, xLen); // 가로 방향 최대 길이 간격 계산
 
 		System.out.println(y * x);
 		sc.close();
