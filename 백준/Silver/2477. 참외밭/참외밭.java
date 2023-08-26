@@ -8,48 +8,33 @@ public class Main {
 
 		int cnt = sc.nextInt();
 
-		int[] count = new int[5];
-		Queue<Integer> queDir = new LinkedList<>();
-		Queue<Integer> queLen = new LinkedList<>();
-
+		int[] count = new int[5]; // 방향별 개수 저장
+		Queue<int[]> que = new LinkedList<>();
 		for (int i = 0; i < 6; i++) {
-			int tempDir = sc.nextInt();
-			queDir.offer(tempDir);
-			queLen.offer(sc.nextInt());
-			count[tempDir]++;
+			int[] arr = { sc.nextInt(), sc.nextInt() };
+			que.offer(arr);
+			count[arr[0]]++; // 방향별 개수 저장
 		}
-		// 뺄 구간이 아닌 곳에서 시작하게 조정
-		while (count[queDir.peek()] != 1) {
-			queDir.offer(queDir.poll());
-			queLen.offer(queLen.poll());
+		// 시작방향 개수가 1이 나오도록 큐 조정
+		while (count[que.peek()[0]] != 1) {
+			que.offer(que.poll());
 		}
 
-		int[] nextDirection = { 0, 4, 3, 1, 2 }; // 다음 방향 저장
-		int row = 0; // 행의 최대 길이
-		int col = 0; // 열의 최대 길이
-		int temp = 0; // 뺄 면적
-
-		int dir = queDir.poll(); // 시작 방향
-		int len = queLen.poll(); // 시작 길이
-		for (int i = 0; i < 5; i++) {
-			if (dir == 1 || dir == 2) { // 가로로 이동한 경우 가로 길이 갱신
-				row = Math.max(row, len);
-			} else { // 세로로 이동한 경우 세로 길이 갱신
-				col = Math.max(col, len);
+		int area = 1; // 최종면적
+		int tempArea = 1; // 뺄면적
+		int flag = 0; // 뺄면적 확인용 플래그
+		for (int[] arr : que) {
+			if (count[arr[0]] == 1) { // 방향의 개수가 1개라면 최종면적에 곱한다.
+				area *= arr[1];
 			}
-			if (nextDirection[dir] != queDir.peek()) { // 다음 방향이 정상 방향이 아닌 경우 뺄 면적을 구한다.
-				temp = len * queLen.peek();
+			if (count[arr[0]] == 2) { // 방향의 개수가 2개라면
+				if (flag == 1 || flag == 2) { // 프래그가 1,2일때만 뺄면적에 곱한다.
+					tempArea *= arr[1];
+				}
+				flag++;
 			}
-			dir = queDir.poll(); // 방향을 갱신한다.
-			len = queLen.poll(); // 길이를 갱신한다.
 		}
-		if (dir == 1 || dir == 2) { // 가로로 이동한 경우 가로 길이 갱신
-			row = Math.max(row, len);
-		} else { // 세로로 이동한 경우 세로 길이 갱신
-			col = Math.max(col, len);
-		}
-		System.out.println((row * col - temp) * cnt);
-
+		System.out.println((area - tempArea) * cnt);
 		sc.close();
 	}
 }
