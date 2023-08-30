@@ -11,7 +11,7 @@ public class Solution {
 			String result = "ON";
 			for (int i = 0; i < n; i++) {
 				// i번째 비트가 0이면
-				if ((m & (int) (Math.pow(2, i))) == 0) {
+				if ((m & 1 << i) == 0) {
 					result = "OFF"; // 스위치 OFF
 				}
 			}
