@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Main {
 	// 가로선이 속해서 나온경우 제거하는 메서드
-	public static boolean inSameNode(boolean[][] matrix, int n, int h) {
+	public static boolean inSameNode(int[][] matrix, int n, int h) {
 		for (int i = 2; i < n; i++) {
 			for (int j = 1; j < h + 1; j++) {
-				if (matrix[i - 1][j] && matrix[i][j]) {
+				if (matrix[i - 1][j] == 1 && matrix[i][j] == 1) {
 					return false;
 				}
 			}
@@ -17,14 +17,14 @@ public class Main {
 	}
 
 	// 자기 자신으로 도달하는 사다리인지 확인하는 메서드
-	public static boolean isValid(boolean[][] matrix, int n, int h) {
+	public static boolean isValid(int[][] matrix, int n, int h) {
 		for (int i = 1; i < n; i++) {
 			int node = i;
 			int edge = 1;
 			for (edge = 1; edge < h + 1; edge++) {
-				if (node < n && matrix[node][edge]) {
+				if (node < n && matrix[node][edge] == 1) {
 					node++;
-				} else if (1 < node && matrix[node - 1][edge]) {
+				} else if (1 < node && matrix[node - 1][edge] == 1) {
 					node--;
 				}
 			}
@@ -55,17 +55,21 @@ public class Main {
 		int m = sc.nextInt();
 		int h = sc.nextInt();
 
-		boolean[][] matrix = new boolean[n][h + 1];
+		int[][] matrix = new int[n][h + 1];
 		for (int i = 0; i < m; i++) {
 			int a = sc.nextInt();
 			int b = sc.nextInt();
-			matrix[b][a] = true; // 가로선 존재하는 경우
+			matrix[b][a] = 1; // 가로선 존재하는 경우
+			matrix[b - 1][a] = -1;
+			if (b < n - 1) {
+				matrix[b + 1][a] = -1;
+			}
 		}
 		// 추가 할 수 있는 가로선 리스트
 		List<int[]> edge = new ArrayList<>();
 		for (int i = 1; i < n; i++) {
 			for (int j = 1; j < h + 1; j++) {
-				if (!matrix[i][j]) {
+				if (matrix[i][j] == 0) {
 					edge.add(new int[] { i, j });
 				}
 			}
@@ -77,12 +81,12 @@ public class Main {
 				// i개의 가로선 조합 구하기
 				backtrack(edge, i, new ArrayList<>(), combination);
 				for (List<int[]> com : combination) {
-					boolean[][] copyM = new boolean[n][h + 1];
+					int[][] copyM = new int[n][h + 1];
 					for (int j = 0; j < n; j++) {
 						copyM[j] = Arrays.copyOf(matrix[j], h + 1);
 					}
 					for (int[] idx : com) {
-						copyM[idx[0]][idx[1]] = true;
+						copyM[idx[0]][idx[1]] = 1;
 					}
 					if (inSameNode(copyM, n, h) && isValid(copyM, n, h)) {
 						System.out.println(i);
