@@ -1,25 +1,37 @@
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
-class Solution {
-	// 재귀를 이용한 거듭제곱을 구한다.
-	public static int getPow(int num, int pow, int result) {
-		if (pow == 0) {
-			return result;
+public class Solution {
+	public static int pow(int n, int m, Map<Integer, Integer> map) {
+		if (map.containsKey(m)) {
+			return map.get(m);
 		} else {
-			// 현재 결과에 밑을 곱하고 지수를 1을 감소시킨다.
-			return getPow(num, pow - 1, result * num);
+			if (m % 2 == 0) {
+				int num = pow(n, m / 2, map) * pow(n, m / 2, map);
+				map.put(m, num);
+				return num;
+			} else {
+				int num = pow(n, (m - 1) / 2, map) * pow(n, (m - 1) / 2, map) * n;
+				map.put(m, num);
+				return num;
+			}
 		}
 	}
 
-	public static void main(String args[]) {
+	public static void main(String[] args) throws IOException {
 		Scanner sc = new Scanner(System.in);
-		int T = 10;
-		for (int test_case = 1; test_case <= T; test_case++) {
+		for (int t = 1; t <= 10; t++) {
 			sc.nextInt();
-			int num = sc.nextInt();
-			int pow = sc.nextInt();
-			int result = getPow(num, pow, 1);
-			System.out.printf("#%d %d\n", test_case, result);
+			int n = sc.nextInt();
+			int m = sc.nextInt();
+
+			Map<Integer, Integer> map = new HashMap<>();
+			map.put(1, n);
+
+			int result = pow(n, m, map);
+			System.out.printf("#%d %d\n", t, result);
 		}
 		sc.close();
 	}
