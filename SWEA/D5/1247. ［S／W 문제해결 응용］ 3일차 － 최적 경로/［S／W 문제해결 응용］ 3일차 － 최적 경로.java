@@ -1,67 +1,52 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.Scanner;
 
-class Solution {
-	// 두 점 사이의 거리를 계산하는 메서드 
-	public static int getLength(ArrayList<Integer> a, ArrayList<Integer> b) {
-		return Math.abs(a.get(0) - b.get(0)) + Math.abs(a.get(1) - b.get(1));
+public class Solution {
+	// 거리를 계산하는 메서드
+	public static int getLen(int[][] matrix, int len, int[] temp) {
+		int sum = 0;
+		int idx = 2;
+		// 첫 번째 점과 두 번재 점 사이의 거리
+		sum += Math.abs(matrix[0][0] - matrix[temp[idx]][0]) + Math.abs(matrix[0][1] - matrix[temp[idx]][1]);
+		// 중간 점들 사이의 거리
+		for (int i = 2; i < len - 1; i++) {
+			sum += Math.abs(matrix[temp[idx]][0] - matrix[temp[idx + 1]][0])
+					+ Math.abs(matrix[temp[idx]][1] - matrix[temp[idx + 1]][1]);
+			idx++;
+		}
+		// 마지막 점과의 거리
+		sum += Math.abs(matrix[1][0] - matrix[temp[idx]][0]) + Math.abs(matrix[1][1] - matrix[temp[idx]][1]);
+		return sum;
 	}
-	// 백트래킹을 수행하는 메서드 
-	public static void backtrack(ArrayList<ArrayList<Integer>> matrix, ArrayList<Integer> start, ArrayList<Integer> end,
-			int cnt, Deque<ArrayList<Integer>> temp, int[] result) {
-		if (cnt == 0) { // 모든 포인트를 방문하는 temp가 완성된 경우 거리르 계산한다. 
-			int temp_sum = 0;
-			for (ArrayList<Integer> idx : temp) {
-				temp_sum += getLength(start, idx);
-				start = idx; // 거리 계산 후 시작점 걩신해 준다. 
-			}
-			temp_sum += getLength(start, end);
-			result[0] = Math.min(result[0], temp_sum);
+	// 순열을 생성하고 최소 거리를 계산하는 메서드 
+	public static void backtrack(int[][] matrix, int len, int idx, int[] temp, boolean[] check, int[] result) {
+		if (idx == len) {
+			result[0] = Math.min(result[0], getLen(matrix, len, temp));
 		} else {
-			for (int i = 0; i < cnt; i++) {
-				temp.offer(matrix.get(i)); // 아직 방문하지 않은 포인트에대한 반복
-				ArrayList<ArrayList<Integer>> temp_matrix = new ArrayList<>();
-				for (int j = 0; j < cnt; j++) {
-					if (j != i) {
-						temp_matrix.add(matrix.get(j));
-					}
+			for (int i = 2; i < len; i++) {
+				if (!check[i]) {
+					check[i] = true;
+					temp[idx] = i;
+					backtrack(matrix, len, idx + 1, temp, check, result);
+					check[i] = false;
 				}
-				backtrack(temp_matrix, start, end, cnt - 1, temp, result);
-				temp.pollLast();
 			}
 		}
 	}
 
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int T = sc.nextInt();
-		sc.nextLine();
-		for (int test_case = 1; test_case <= T; test_case++) {
-			int len = sc.nextInt();
-			ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+		for (int t = 1; t <= T; t++) {
+			int len = sc.nextInt() + 2;
+			int[][] matrix = new int[len + 2][2];
 			for (int i = 0; i < len; i++) {
-				matrix.add(new ArrayList<>());
-			}
-
-			ArrayList<Integer> start = new ArrayList<>();
-			start.add(sc.nextInt());
-			start.add(sc.nextInt());
-
-			ArrayList<Integer> end = new ArrayList<>();
-			end.add(sc.nextInt());
-			end.add(sc.nextInt());
-
-			for (int i = 0; i < len; i++) {
-				matrix.get(i).add(sc.nextInt());
-				matrix.get(i).add(sc.nextInt());
+				matrix[i][0] = sc.nextInt();
+				matrix[i][1] = sc.nextInt();
 			}
 
 			int[] result = { Integer.MAX_VALUE };
-			backtrack(matrix, start, end, len, new ArrayDeque<>(), result);
-
-			System.out.printf("#%d %d\n", test_case, result[0]);
+			backtrack(matrix, len, 2, new int[len], new boolean[len], result);
+			System.out.printf("#%d %d\n", t, result[0]);
 		}
 		sc.close();
 	}
