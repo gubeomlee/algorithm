@@ -68,6 +68,7 @@ public class Solution {
 			result[i] = list.get(i);
 		}
 		Arrays.sort(result);
+
 		return result;
 	}
 }
