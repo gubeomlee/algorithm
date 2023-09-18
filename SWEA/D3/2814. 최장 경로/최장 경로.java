@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Solution {
-	// 가장 긴 사이클을 찾는 메서드
+	// 가장 긴 경로를 찾는 메서드
 	public static void dfs(int[][] matrix, boolean[] check, int node, int temp, int[] result) {
 		for (int i = 1; i < matrix.length; i++) {
 			if (!check[i] && (matrix[node][i] == 1 || node == 0)) {
