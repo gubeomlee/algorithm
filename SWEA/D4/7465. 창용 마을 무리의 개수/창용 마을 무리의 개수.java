@@ -1,53 +1,43 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-class Solution {
-	public static void bfs(ArrayList<ArrayList<Integer>> matrix, boolean[] is_checked, int node) {
-		Queue<Integer> deque = new ArrayDeque<>();
-		deque.add(node);
-
-		while (!deque.isEmpty()) {
-			int cur = deque.poll();
-			if (!is_checked[cur]) {
-				is_checked[cur] = true; // 현재 노드 방문 처리
-				for (int adjacentNode : matrix.get(cur)) {
-					deque.add(adjacentNode); // 현재 노드와 연결된 노드들 큐 추가 
-				}
-			}
-		}
-	}
-
-	public static void main(String args[]) throws Exception {
+public class Solution {
+	public static void main(String[] args) throws IOException {
 		Scanner sc = new Scanner(System.in);
 		int T = sc.nextInt();
-		for (int test_case = 1; test_case <= T; test_case++) {
-			int n = sc.nextInt(); // 노드의 개수
-			int m = sc.nextInt(); // 간선의 개수
+		for (int t = 1; t <= T; t++) {
+			int n = sc.nextInt();
+			int m = sc.nextInt();
 
-			ArrayList<ArrayList<Integer>> matrix = new ArrayList<>(); // 인접 리스트 그래프
-			for (int i = 0; i <= n; i++) {
-				matrix.add(new ArrayList<Integer>());
-			}
-			// 간선 정보 입력 및 인접 리스트 그래프 구성
+			int[][] matrix = new int[n + 1][n + 1];
 			for (int i = 0; i < m; i++) {
-				int num1 = sc.nextInt();
-				int num2 = sc.nextInt();
-				matrix.get(num1).add(num2);
-				matrix.get(num2).add(num1);
+				int x = sc.nextInt();
+				int y = sc.nextInt();
+				matrix[x][y] = matrix[y][x] = 1;
 			}
 
-			boolean[] is_ckecked = new boolean[n + 1];
-
-			int result = 0;
+			int cnt = 0;
+			boolean[] check = new boolean[n + 1];
 			for (int i = 1; i <= n; i++) {
-				if (!is_ckecked[i]) {
-					result++;
-					bfs(matrix, is_ckecked, i);
+				if (!check[i]) { // 확인하지 않은 경우
+					cnt++;
+					Queue<Integer> que = new LinkedList<>();
+					que.add(i);
+					check[i] = true;
+					while (!que.isEmpty()) { // bfs를 통해 아는 사람을 체크한다.
+						int idx = que.poll();
+						for (int j = 0; j <= n; j++) {
+							if (matrix[idx][j] == 1 && !check[j]) {
+								que.add(j);
+								check[j] = true;
+							}
+						}
+					}
 				}
 			}
-			System.out.printf("#%d %d\n", test_case, result);
+			System.out.printf("#%d %d\n", t, cnt);
 		}
 		sc.close();
 	}
