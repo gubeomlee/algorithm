@@ -1,8 +1,8 @@
 -- 코드를 입력하세요
 SELECT *
-from (
+from(
     select * 
     from food_product
     order by price desc
 )
-where rownum = 1; 
+where rownum = 1;
