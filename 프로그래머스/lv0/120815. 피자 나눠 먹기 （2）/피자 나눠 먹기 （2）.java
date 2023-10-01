@@ -3,8 +3,7 @@ class Solution {
         int cnt = 1;
         if(n % 6 == 0) {
             n /= 6; 
-            cnt *= n;
-            return cnt; 
+            return cnt * n; 
         }        
         if(n % 2 == 0) {
             n /= 2; 
