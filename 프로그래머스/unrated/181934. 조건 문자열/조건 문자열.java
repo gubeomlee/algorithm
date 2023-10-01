@@ -1,34 +1,22 @@
 class Solution {
     public int getInt(String ineq, String eq, int n, int m) {
+        boolean answer = false; 
+        
         if(ineq.equals("<")) {
             if(eq.equals("=")) {
-                if(n <= m) {
-                    return 1; 
-                } else {
-                    return 0; 
-                }
+                answer = n <= m; 
             } else {
-                if(n < m) {
-                    return 1; 
-                } else {
-                    return 0; 
-                }
+                answer = n < m; 
             }
         } else {
             if(eq.equals("=")) {
-                if(n >= m) {
-                    return 1; 
-                } else {
-                    return 0; 
-                }                
+                answer = n >= m;                
             } else {
-                if(n > m) {
-                    return 1; 
-                } else {
-                    return 0; 
-                }                
+                answer = n > m;             
             }
         }
+        
+        return answer ? 1 : 0; 
     }
     
     public int solution(String ineq, String eq, int n, int m) {
