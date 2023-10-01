@@ -6,6 +6,5 @@ SELECT board_id, writer_id, title, price,
         when status = 'DONE' then '거래완료'
     end as status
 from used_goods_board
-where to_char(created_date, 'yyyy-mm-dd') = '2022-10-05' 
-order by board_id desc; 
-
+where created_date = date '2022-10-05' 
+order by board_id desc;
