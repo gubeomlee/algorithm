@@ -6,4 +6,4 @@ SELECT order_id, product_id, nvl2(out_date, to_char(out_date, 'yyyy-mm-dd'), '')
         when out_date is null then '출고미정'
     end as 출고여부 
 from food_order
-order by order_id; 
+order by order_id;
