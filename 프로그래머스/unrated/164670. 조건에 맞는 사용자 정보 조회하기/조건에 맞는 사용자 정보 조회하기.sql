@@ -8,4 +8,4 @@ where b.writer_id in (
     group by writer_id
     having count(writer_id) >= 3
 )
-order by user_id desc; 
+order by user_id desc;
