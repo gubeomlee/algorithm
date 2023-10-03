@@ -7,4 +7,4 @@ from (select writer_id, sum(price) sum
      ) b join used_goods_user u
 on b.writer_id = u.user_id
 where b.sum >= 700000
-order by b.sum; 
+order by b.sum;
