@@ -7,4 +7,4 @@ from (
     where o.datetime is null
     order by datetime
 )
-where rownum <= 3; 
+where rownum <= 3;
