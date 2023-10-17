@@ -1,16 +1,13 @@
 class Solution {
-    public long getNum(int p, int money, int c) {
-        long m = money; 
-        for(int i=1 ; i<=c ; i++) {
-            m -= i * p; 
-        }
-        if(m >= 0) {
+    public long getNum(int p, long m, int c) {
+        long result = (long) c * (c + 1) / 2 * p - m;
+        if(result < 0) {
             return 0; 
         }
-        return m * -1; 
+        return result; 
     }
     
-    public long solution(int price, int money, int count) {
+    public long solution(int price, long money, int count) {
         long answer = getNum(price, money, count);
         return answer;
     }
